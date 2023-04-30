@@ -343,6 +343,7 @@ void bellman_ford(Graph& G, int source) {
 
 /*
 ************************ MINIMUM SPANNING TREE (MST) ***************************************
+-> Conceito de Grafos Não-Direcionados
 Conceitos:
 -> cut: É uma partição dos nós de um grafo em dois subconjunto não-vazios, tal que a soma dos dois
      subconjuntos gera o grafo original.
@@ -350,13 +351,20 @@ Conceitos:
             Ou seja, é o conjunto de arestas que conecta o cut S com o restante do grafo.
 -> A interceção de um cutset e um ciclo em um grafo G possui um número par de arestas.
 
--> ÁRVORE GERADOR MINIMA (AGM/MST): Uma árvóre geradora minima de um grafo G é um subgrafo de G que:
+-> ÁRVORE GERADORA: Uma árvóre geradora de um grafo G é um subgrafo de G que:
     * Contém todos os nós de G;
     * Obviamente é uma árvore, ou seja, não possui ciclos;
     * Por implicação, possui V-1 arestas;
     * É CONEXA.
     * Remover qualquer aresta desconecta a árvore (Mimimally Connected)
     * Adicionar qualquer aresta forma um ciclo (Maximally Acyclic)
+
+-> ÁRVORE GERADORA MiNÍMA (AGM/MST): É uma árvore geradora com a soma das árestas minimizadas. Ou seja, é a árvore geradora com a menor soma de arestas de um grafo G.
+
+-> Ciclo Fundamental: Ao adicionar qualquer aresta em uma árvore geradora T irá se formar um ciclo C. 
+                      Retirando QUALQUER aresta de C, não necessáriamente a adicionada no passo anterior, iremos ter uma nova árvore geradora.
+-> Cutset Fudamental: Se T é uma árvore geradora de G, ao retirar uma aresta de T eu obtenho 2 componentes conectados. E ao adicionar qualquer
+                      aresta eu gero outra árvore geradora.
 */
 int main(int argc, char const *argv[]) {
   int cities, paths, i, j, dis;
