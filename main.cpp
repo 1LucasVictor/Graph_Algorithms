@@ -463,6 +463,35 @@ Segue a mesma lógica do algoritmo de Kruskal. Porém, ao invés de adicionar as
 
 Complexidade: O(mlog(m))
 */
+
+
+/*
+  ****************************** Fluxo em Redes **************************************
+  É uma modelagem de um rede em um grafo direcionado G tal que:
+    * Cada aresta e posusi um peso não negativo, sendo que o peso representa a capacidade de fluxo(passagem de dados) dessa aresta.
+    * Um nó de origem s, tal que s é a fonte do fluxo.
+    * Um nó de destino t, tal que t é o fim do fluxo. 
+    * Em uma configuração/caminho de fluxo, medimos o quanto de fluxo está passando em uma determinada aresta utilizando uma função F(e), essa função
+      simplesmete calcula o fluxo (o fluxo acumulado)  que está passando na aresta e.
+    
+
+    Condições para um fluxo:
+    1- Condião de capacidade: para toda aresta e, 0 <= F(e) <= c(e). Ou seja, o fluxo de uma aresta deve estar entre 0 e sua capacidade máxima.
+    2- Condição de conservação: para todo vertice v (exceto para os nós de origem e destino), a soma dos fluxos das arestas de entrada em v deve ser igual a 
+     soma dos fluxos das arestas de saída de v.
+
+    Em suma, temos que o fluxo dentro de uma configuração é constante. O valor do fluxo é igual à soma do fluxo das arestas de saída do nó de origem, e, obviamente,
+    também é igual à soma do fluxo das arestas de entrada do nó de destino.
+
+
+    Problema:
+    Dado um grafo de fluxo de rede com uma fonte/origem que pode produzir fluxo ilimitado, qual o valor máximo possivel que o fluxo pode ter para chegar 
+    ao nó de destino passando pelas arestas do grafo e sem exceder os limites de capacidade de fluxo de nenhuma aresta?
+    
+  
+  O problema que buscamos solucionar é o seguinte: 
+
+*/
 int main(int argc, char const *argv[]) {
   int cities, paths, i, j, dis;
 
