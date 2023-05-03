@@ -20,11 +20,24 @@ using namespace std;
 -> Dijkstra (Find the Shortest Path from a node to all other nodes)
 -> Bellman-Ford Algorithm (Find the Shortest Path from a node to all other nodes but the graph may contains negative edges)
 -> Prim (Spanning Tree)
--> Kruskal
--> Reverse Delete
--> Boruvka
+-> Kruskal (Spanning Tree)
+-> Reverse Delete (A reverse Kruskal)
+-> Ford-Fulkerson
 */
 
+/*
+  Costs:
+  BFS = O(V + E)
+  DFS = O(V + E)
+  Kosaraju = O(V + E)
+  Ordenação Topologica = O(V + E)
+  2-SAT = O(V + E)
+  Dijsktra = O(E + V*log(V))
+  BellmanFord = O(VE)
+  Prim = O(m * log(n))
+  Kruskal = O(m * log(m))
+  Ford Fulkerson = O(V + E);
+*/
 
 //********** Algoritmos de BUSCA: *****************
 // Complexidade = O(n+m) ou O(V+E)
@@ -487,10 +500,43 @@ Complexidade: O(mlog(m))
     Problema:
     Dado um grafo de fluxo de rede com uma fonte/origem que pode produzir fluxo ilimitado, qual o valor máximo possivel que o fluxo pode ter para chegar 
     ao nó de destino passando pelas arestas do grafo e sem exceder os limites de capacidade de fluxo de nenhuma aresta?
-    
   
-  O problema que buscamos solucionar é o seguinte: 
+    ******************* Algoritmo Guloso *******************************
+    É um algoritmo falho!! Nem sempre acha a melhor solução.
 
+    -> Para cada aresta E, guarde a capacidade de fluxo e o fluxo atual dela;
+    -> Inicialize o fluxo atual de todas as arestas como 0;
+    -> Encontre um caminho qualquer de da fonte (s) para o vertice final (t), no qual as arestas ainda 
+       não estão gastando a capacidade de fluxo.
+    -> Atulualize o fluxo atual de cada aresta, para isso:
+       * Encontre a aresta com a menor diferença entre o fluxo maximo e fluxo atual (c(e) - f(e)). 
+       * Some a menor diferença no fluxo atual de cada aresta
+       * A menor diferença é chamada de gargalo/bottleneck
+    -> Repita esse processo até não ser mais possivel a continuação.
+    -> A soma do fluxo das arestas de entrada do vértice de destino é o fluxo máximo
+
+    -> O algortimo é falho pois uma vez que o fluxo de uma aresta é definido ele nunca atualiza 
+    esse fluxo.
+
+
+  ***************************** Algortimo de Ford-Fulkerson *******************************************
+  É um algoritmo muito parecido com o algoritmo visto anteriormente, com uma mudança na forma de explorar os caminhos
+  que permite desfazer decisões ruins tomadas em passos anteriores do algoritmo.
+
+  Algoritmo:
+  * Repita enquanto for possível:
+    -> Encontre um caminho (augmenting path) p;
+    -> Encontre o bottleneck de p
+    -> Aumente o fluxo de cada aresta de p;
+  
+  A diferença agora esta em econtrar o caminho, chamado de augmenting path. As arestas desse caminho podem ser de dois tipos:
+   * Arestas que ainda não atingiram a capacidade maxima, nesse caso utiliza-se a aresta em sua direção original. Essas arestas nos 
+     permite adicionar mais fluxo no grafo.
+   * Arestas que possuem algum fluxo, nesse caso PODEMOS utilizar esta aresta com direção contrária, nos permitindo desfazer
+     más decisões tomadas anteriormente. Isso nos permite reduzir o fluxo dessa aresta. É como se para toda aresta A->B que possui algum fluxo
+     passando, também existe uma aresta B->A. Com isso, podemos retornar um fluxo que A passou para B de volta para A.
+
+  Complexidade = O(C*E)
 */
 int main(int argc, char const *argv[]) {
   int cities, paths, i, j, dis;
