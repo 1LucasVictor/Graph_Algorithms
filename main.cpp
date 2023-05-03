@@ -21,6 +21,7 @@ using namespace std;
 -> Bellman-Ford Algorithm (Find the Shortest Path from a node to all other nodes but the graph may contains negative edges)
 -> Prim (Spanning Tree)
 -> Kruskal
+-> Reverse Delete
 -> Boruvka
 */
 
@@ -441,6 +442,27 @@ void prim(Graph& G) {
   delete [] mstNodes;
   delete [] distance;
 }
+
+/*
+********************************* Algoritmo de Kruskal *********************************
+-> Dado um grafo G, ordene as arestas em ordem crescente de peso.
+-> Enquanto não for considerado todas as arestas:
+   * Adicione a aresta de menor peso, a não ser que a adição dela na MST forme um ciclo.
+-> O Grafo resultante é uma MST
+
+Complexidade: O(mlog(m))
+*/
+
+/*
+******************************** Reverse Delete ***************************************
+Segue a mesma lógica do algoritmo de Kruskal. Porém, ao invés de adicionar as arestas de menor peso as arestas de maior peso são removidas.
+-> Dado um grafo G, ordene as arestas em ordem decrescente de peso.
+-> Enquanto não for considerado todas as arestas:
+   * Remova a aresta de maior peso, a não ser que a remoção dela desconecte o grafo.
+-> O Grafo resultante é uma MST
+
+Complexidade: O(mlog(m))
+*/
 int main(int argc, char const *argv[]) {
   int cities, paths, i, j, dis;
 
