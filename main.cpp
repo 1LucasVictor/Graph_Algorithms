@@ -242,7 +242,7 @@ mais curto entre dois vértices de um Grafo ponderado G, seja ele direcionado ou
 
 // Relembrando: complexidade = O(E + V*log(V))
 void Dijkstra(Graph& G, int source) {
-  priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> p_queue; p_queue;
+  priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> p_queue;
   int* distance = new int[G.num_nodes];
 
   // Setting distances
@@ -303,7 +303,7 @@ Conceito: Relaxar uma aresta (A->B) consiste em verificar se a distância atual 
 O algoritmo inicia com a definição da distância de cada vértice como infinita, exceto pelo vértice de origem, que tem distância 0. 
 Em seguida, relaxa as arestas repetidamente, atualizando a distância mínima dos vértices até que nenhuma distância possa mais ser melhorada.
 
-
+Complexidade = O(VE);
 */
 void bellman_ford(Graph& G, int source) {
   int* distance = new int[G.num_nodes];
@@ -359,13 +359,88 @@ Conceitos:
     * Remover qualquer aresta desconecta a árvore (Mimimally Connected)
     * Adicionar qualquer aresta forma um ciclo (Maximally Acyclic)
 
--> ÁRVORE GERADORA MiNÍMA (AGM/MST): É uma árvore geradora com a soma das árestas minimizadas. Ou seja, é a árvore geradora com a menor soma de arestas de um grafo G.
+-> ÁRVORE GERADORA MiNÍMA (AGM/MST): É uma árvore geradora com a soma das arestas minimizadas. Ou seja, é a árvore geradora com a menor soma de arestas de um grafo G.
 
 -> Ciclo Fundamental: Ao adicionar qualquer aresta em uma árvore geradora T irá se formar um ciclo C. 
                       Retirando QUALQUER aresta de C, não necessáriamente a adicionada no passo anterior, iremos ter uma nova árvore geradora.
 -> Cutset Fudamental: Se T é uma árvore geradora de G, ao retirar uma aresta de T eu obtenho 2 componentes conectados. E ao adicionar qualquer
                       aresta eu gero outra árvore geradora.
+
+**************************************** Algoritmo Guloso *************************************
+--> Red Rule: Seja C um ciclo sem arestas vermelhas. Selecione a aresta de maior peso que não poussi cor pinte-a de vermelho.
+--> Blue Rule:Seja D um cutset sem arestas azuis. Selecine a aresta de menor peso que não possui cor e pinte-a de azul.
+
+-> Algoritmo:
+  * Aplique a red rule e a blue rule até todas arestas estarem coloridas.
+  * As arestas azuis formam um MST.
+  * Caso n-1 arestas já estão pintadas de azul, o algoritmo pode ser interrompido.
+  
+
+*************************************** Algoritmo de Prim **************************************
+Algoritmo para encontrar a MST de um grafo G.
+-> Seja S um conjunto de vértices e T um conjunto de arestas.
+-> Escolha um vértice qualquer de G e adicione em S
+-> Realize o seguinte processo n-1 vezes:
+   * Adicione à T a aresta E com o menor peso que possua apenas 1 conexão à vértices de S
+   * Adicione em S o vértice de E que ainda não estava em S.
+-> O grafo G'(S, T) é a MST de G.
+
+A implementação do algorimto de Prim é muito semelhante a do Dijkstra. 
+
+
+
+Complexidade O(mlog(n))
 */
+
+// Funcção que seleciona o nó de G mais proximo da MST
+int nearestNode(int* mstNodes, int* distance, int N) {
+  int nearest_node;
+  int min = INT32_MAX;
+  for(int i = 0; i < N; i++) {
+    if(!mstNodes[i] && distance[i] < min)
+      min = distance[i], nearest_node = i;
+  }
+  return nearest_node;
+}
+
+void prim(Graph& G) {
+  // Representa as arestas da MST
+  int* mstEdges = new int[G.num_nodes];
+  // Armazena os nós já presentes na MST
+  int* mstNodes = new int[G.num_nodes];
+  // Vetor de distancias de nós fora da MST até algum nó da MST
+  int* distance = new int[G.num_nodes];
+
+  for(int i = 0; i < G.num_nodes; i++) {
+    mstNodes[i] = 0;
+    distance[i] = INT32_MAX;
+  }
+
+  distance[0] = 0;
+  mstEdges[0] = -1;
+
+  // V-1 iterações
+  for(int i = 0; i < G.num_nodes; i++) {
+    // Selecionando o vértice de G mais próximo da MST
+    int v = nearestNode(mstNodes, distance, G.num_nodes);
+    mstNodes[v] = 1;
+    for(int j = 0; j < G.num_nodes; j++) {
+      if(G.City_Adjacency[v][j] != -1 && !mstNodes[j] && distance[j] > G.City_Adjacency[v][j]) {
+        mstEdges[j] = v;
+        distance[j] = G.City_Adjacency[v][j];
+      }
+    }
+  }
+
+  cout << "MST:\n";
+  for(int i = 1; i < G.num_nodes; i++) {
+    cout << mstEdges[i]+1 << "--" << i+1 << endl;
+  }
+
+  delete [] mstEdges;
+  delete [] mstNodes;
+  delete [] distance;
+}
 int main(int argc, char const *argv[]) {
   int cities, paths, i, j, dis;
 
@@ -388,7 +463,8 @@ int main(int argc, char const *argv[]) {
   // kosaraju(g);
   // cout << topologicalSorting(g) << endl;
   // Dijkstra(g, 0);
-  bellman_ford(g, 0);
+  // bellman_ford(g, 0);
+  prim(g);
   delete[] visited;
   return 0;
 }
