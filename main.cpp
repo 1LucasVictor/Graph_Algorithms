@@ -223,6 +223,12 @@ Considere S uma expressão booleana com N variáveis
   * Rode uma BFS para testar se há um caminho de !X para X
   * Caso os dois sejam verdadeiros, S não posui solução
   * Se para toda variável o teste deu falso, então S possui solução.
+  
+Para achar a solução:
+Caso você verifique que há uma solução, para encontrá-la basta:
+-> Enquanto houver uma variavel sem valor:
+   * Escolha uma variavel X que ainda não possui valor e dê valor 1 para ela.
+   * Dê valor 1 para todas outras variáveis alcançaveis a partir de X, e valor 0 para suas negações.
 
 */
 
